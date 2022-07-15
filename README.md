@@ -1,8 +1,8 @@
 # sips-mc
-Sushi's Internet Port Scanner (for Minecraft)
+Sushi's Internet Protocol Scanner (for Minecraft)
 
 ## Info
-This is a port scanner I wrote in go to find the status of minecraft servers given a large list of IPs. 
+This is an ip scanner I wrote in go to find the status of minecraft servers given a large list of IPs. 
 It divides the IPs into chunks and concurrently scans the servers and prints the output to a file.
 - This should not be used on your home wifi because it may make your ISP angry.
 - This project is not designed for scanning the entire internet (it will be too slow). For that, try masscan.
