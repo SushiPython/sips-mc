@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 	"github.com/alteamc/minequery/ping"
-	"github.com/korovkin/limiter"
+	"sync"
 )
 
 func checkErr(err error) {
@@ -14,18 +14,19 @@ func checkErr(err error) {
 	}
 }
 
-func checkServer(ip string, ipNum int, file *os.File) {
+func checkServer(ip string, file *os.File, wg *sync.WaitGroup) {
 	resp, err := ping.Ping(ip, 25565)
 	if (err == nil) {
 		if motd, ok := resp.Description.(map[string]interface{}); ok {
 			file.WriteString(fmt.Sprintf(`{"ip":"%s","motd":"%s","online":%d}` + "\n", ip, motd["text"], resp.Players.Online))
 		}
 	}
+	wg.Done()
 }
 
 func main() {
 	fmt.Println("beginning scan...")
-	limit := limiter.NewConcurrencyLimiter(10000) // set this to the number of concurrent requests you want to make
+	var wg sync.WaitGroup
 	f, err := os.OpenFile("output.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	checkErr(err)
 	// read ips.txt and split by newline
@@ -37,11 +38,10 @@ func main() {
 
 
 	// iterate over ips
-	for index, chunk := range ips {
-		limit.Execute(func() {
-			checkServer(chunk, index, f)
-		})
+	for _, ip := range ips {
+		wg.Add(1)
+		go checkServer(ip, f, &wg)
 	}
-	defer limit.WaitAndClose()
+	wg.Wait()
 	fmt.Println("scan complete")
 }
