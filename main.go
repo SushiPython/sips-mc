@@ -29,7 +29,7 @@ func main() {
 	f, err := os.OpenFile("output.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	checkErr(err)
 	// read ips.txt and split by newline
-	content, err := os.ReadFile("backup.txt")
+	content, err := os.ReadFile("ips.txt")
 	
 	checkErr(err)
 	ips := strings.Split(string(content), "\n")
