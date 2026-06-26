@@ -1,15 +1,39 @@
 # sips-mc
-Sushi's Internet Protocol Scanner (for Minecraft)
 
-## Info
-This is an ip scanner I wrote in go to find the status of minecraft servers given a large list of IPs. 
-It divides the IPs into chunks and concurrently scans the servers and prints the output to a file.
-- This should not be used on your home wifi because it may make your ISP angry.
-- This project is not designed for scanning the entire internet (it will be too slow). For that, try masscan.
+sips-mc is a concurrent Minecraft server scanner written in Go. It takes a list of IP addresses, checks whether each one is running a Minecraft server, and writes the results to an output file.
 
-## Usage
-- Create a file "ips.txt" and "output.txt".
-- "ips.txt" should be a list of IPs seperated by newlines.
-- "output.txt" should be blank because that is where the program will write to.
+## What it does
 
-Note: this does not fully work yet and is not tested on all operating systems.
+* Scans large IP lists for Minecraft server status
+* Uses goroutines to run checks concurrently
+* Splits IPs into chunks for faster scanning
+* Writes discovered server results to `output.txt`
+* Built as a simple CLI-style networking tool
+
+## Tech Stack
+
+* Go
+* TCP networking
+* File I/O
+* Concurrency
+
+## How to use
+
+Create an `ips.txt` file with one IP address per line:
+
+```txt
+1.2.3.4
+5.6.7.8
+```
+
+Then run:
+
+```bash
+go run main.go
+```
+
+Results are written to:
+
+```txt
+output.txt
+```
